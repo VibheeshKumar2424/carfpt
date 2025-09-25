@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Dashboard - Carbon Tracker</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<nav>
+    <div>Welcome, <span sec:authentication="name">User</span></div>
+    <div>
+        <a href="/profile">Profile</a>
+        <a href="/add">Add Entry</a>
+        <a href="/logout">Logout</a>
+    </div>
+</nav>
+<div th:replace="~{fragments/header :: header}"></div>
+
+
+<div class="container">
+    <div class="card">
+        <h3>Total CO2 Emission: <span th:text="${totalCO2}">0</span> kg</h3>
+    </div>
+
+    <div class="card">
+        <canvas id="activityChart" width="400" height="200"></canvas>
+    </div>
+
+    <div class="card">
+        <h3>Your Carbon Entries</h3>
+        <table>
+            <tr>
+                <th>Activity</th>
+                <th>Amount</th>
+                <th>CO2 (kg)</th>
+                <th>Date</th>
+            </tr>
+            <tr th:each="entry : ${entries}">
+                <td th:text="${entry.activity}"></td>
+                <td th:text="${entry.amount}"></td>
+                <td th:text="${entry.carbonEmission}"></td>
+                <td th:text="${entry.date}"></td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<script th:inline="javascript">
+    // Get data from the model
+    var labels = [[${chartLabels}]];
+    var values = [[${chartValues}]];
+
+    const ctx = document.getElementById("activityChart");
+    new Chart(ctx, {
+        type: "bar",
+        data: {
+            labels: labels,
+            datasets: [{
+                label: "CO₂ Emission (kg)",
+                data: values,
+                borderWidth: 1,
+                backgroundColor: "rgba(75, 192, 192, 0.5)"
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+</body>
+</html>

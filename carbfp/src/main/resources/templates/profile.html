@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Profile - Carbon Tracker</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<nav>
+    <div>Welcome, <span sec:authentication="name">User</span></div>
+    <div>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/logout">Logout</a>
+    </div>
+</nav>
+<div th:replace="fragments/header :: header"></div>
+
+<div class="container">
+    <div class="card">
+        <h3>Profile Details</h3>
+        <p><strong>Username:</strong> <span sec:authentication="name">User</span></p>
+        <p><strong>Role:</strong> <span th:text="${role}">USER</span></p>
+        <p><strong>Total CO2 Emission:</strong> <span th:text="${totalCO2}">0</span> kg</p>
+    </div>
+</div>
+</body>
+</html>
